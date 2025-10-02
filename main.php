@@ -19,13 +19,13 @@
                 <h1>Einpflege von Daten</h1>
                 <form id="neuer_eintrag">
                     <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Date</label>
-                        <input type="date" class="form-control" id="exampleFormControlInput1" 
+                        <label for="datum" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="datum" 
                             placeholder="name@example.com">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Inhalt</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <label for="inhalt" class="form-label">Inhalt</label>
+                        <textarea class="form-control" id="inhalt" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-outline-primary mb-3">Neuen Eintrag anlegen</button>
@@ -117,15 +117,20 @@
             // alert("Jquery läuft");
             $('#neuer_eintrag').submit(function(event) {
                 event.preventDefault();
-                
                 $.ajax({
-                url: "demo_test.txt", 
-                success: function(result){
-                    $("#div1").html(result);
-                }
-                error: function(xhr){
-                    alert("An error occured: " + xhr.status + " " + xhr.statusText);
-                }
+                    url: "create-eintrag.php",
+                    method: "POST",
+                    data: {
+                        datum: $('#datum').val(),
+                        inhalt: $('#inhalt').val().trim()
+                    },   
+                    success: function(res){
+                        let resJSON = JSON.parse(res);
+                        console.log(res);
+                    },
+                    error: function(err){
+                        alert("An error occured: " + err.status + " " + err.statusText);
+                    },
                 });
             })
         })
