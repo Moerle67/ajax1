@@ -79,27 +79,31 @@
             </div>
         </div>
     </div>
+
     <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+    </button>
 
-
-<!-- Modal -->
-<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -109,12 +113,12 @@
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>   
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // alert("Jquery läuft");
-            $('#neuer_eintrag').submit(function(event) {
+            $('#neuer_eintrag').submit(function (event) {
                 event.preventDefault();
                 $.ajax({
                     url: "create-eintrag.php",
@@ -122,32 +126,32 @@
                     data: {
                         datum: $('#datum').val(),
                         inhalt: $('#inhalt').val().trim()
-                    },   
-                    success: function(res){
+                    },
+                    success: function (res) {
                         // let resJSON = JSON.parse(res);
                         let resJSON = res;
                         // console.log(resJSON);
                         if (resJSON.status !== "error") {
-                            $('#testTable tbody').find('tr:last').after('<tr id="'+resJSON.ID+'">'
-                                    +'<td>'+resJSON.ID+'</td>' 
-                                    +'<td>'+resJSON.Datum+'</td>' 
-                                    +'<td>'+resJSON.Inhalt+'</td>'
-                                    +'<td>'
-                                        +'<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>'
-                                        +'<button type="button" class="btn btn-outline-danger delete">Löschen</button>'
-                                    +'</td>'
-                                +'</tr>'
+                            $('#testTable tbody').find('tr:last').after('<tr id="' + resJSON.ID + '">'
+                                + '<td>' + resJSON.ID + '</td>'
+                                + '<td>' + resJSON.Datum + '</td>'
+                                + '<td>' + resJSON.Inhalt + '</td>'
+                                + '<td>'
+                                + '<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>'
+                                + '<button type="button" class="btn btn-outline-danger delete">Löschen</button>'
+                                + '</td>'
+                                + '</tr>'
                             );
                         } else {
                             alert('Fehler beim Einfügen');
                         }
                     },
-                    error: function(err){
+                    error: function (err) {
                         alert("An error occured: " + err.status + " " + err.statusText);
                     },
                 });
             })
-            $('#testTable tbody').on('click', 'button.delete', function(event) {
+            $('#testTable tbody').on('click', 'button.delete', function (event) {
                 let id = $(this).closest('tr').attr('id');
                 // alert("Hier wird nichts gelöscht ("+id+")!");
                 event.preventDefault();
@@ -156,22 +160,22 @@
                     method: "POST",
                     data: {
                         id: id,
-                    },   
-                    success: function(res){
+                    },
+                    success: function (res) {
                         if (res.status !== "error") {
-                            $('#'+id).remove();
-                        }  else {
+                            $('#' + id).remove();
+                        } else {
                             alert("Fehler beim Löschen");
                         }
                     },
-                    error: function(err){
+                    error: function (err) {
                         alert("An error occured: " + err.status + " " + err.statusText);
                     },
 
-                });        
+                });
             });
         })
-    </script>    
+    </script>
 </body>
 
 </html>
