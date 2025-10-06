@@ -17,11 +17,10 @@
         <div class="row">
             <div class="col">
                 <h1>Einpflege von Daten</h1>
-                <form id="neuer_eintrag">
+                <form id="neuer_eintrag" method="POST">
                     <div class="mb-3">
                         <label for="datum" class="form-label">Date</label>
-                        <input type="date" class="form-control" id="datum" 
-                            placeholder="name@example.com">
+                        <input type="datetime-local" class="form-control" id="datum">
                     </div>
                     <div class="mb-3">
                         <label for="inhalt" class="form-label">Inhalt</label>
@@ -40,7 +39,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <table class="table table-striped">
+                <table class="table table-striped" id="testTable">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -125,8 +124,23 @@
                         inhalt: $('#inhalt').val().trim()
                     },   
                     success: function(res){
-                        let resJSON = JSON.parse(res);
-                        console.log(res);
+                        // let resJSON = JSON.parse(res);
+                        let resJSON = res;
+                        console.log(resJSON);
+                        if (resJSON !== "error") {
+                            $('#testTable tbody').find('tr:last').after('<tr>'
+                                    +'<td>'+resJSON.ID+'</td>' 
+                                    +'<td>'+resJSON.Datum+'</td>' 
+                                    +'<td>'+resJSON.Inhalt+'</td>'
+                                    +'<td>'
+                                        +'<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>'
+                                        +'<button type="button" class="btn btn-outline-danger">Löschen</button>'
+                                    + '</td>'
+                                +'</tr>'
+                            );
+                        } else {
+                            alert('Fehler beim Einfügen');
+                        }
                     },
                     error: function(err){
                         alert("An error occured: " + err.status + " " + err.statusText);

@@ -1,10 +1,10 @@
 <?php
     header('Content-type: application/json; charset=utf-8');
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // datum: "2025-10-02",
         // inhalt: "Das ist ein AJAC Test."
         if (empty($_POST["datum"]) || empty($_POST["inhalt"])){
-            print("Fehler!");
+            print("Fehler! Feld fehlt");
             exit();
         }
         $datum = $_POST["datum"];
@@ -23,14 +23,21 @@
             //throw $th;
             error_log("Write error(".date("F j, Y, g:i a").") ".$ex."\r\n", 3, "logs/db-error.txt");
             print(json_encode(array("status" => "error")));
-        }
+            exit();
+        };
         // Optionale Felder ?? wenn Feld leer, dann ...
         // $inhalt = $_POST['inhalt'] ?? "";
         // print($datum." ".$inhalt);
-        print(json_encode(array(
+
+       echo json_encode(
+        array(
+            "ID" => $lastID,
             "Datum" => $datum,
             "Inhalt" => $inhalt)
-        ));
+        );
+        exit();    
+    } else {
+        print("Error, kein POST");
         exit();
     }
 ?>
