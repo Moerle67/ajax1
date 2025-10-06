@@ -159,7 +159,7 @@
                     },   
                     success: function(res){
                         if (res.status !== "error") {
-                            alert("Lösche Zeile");
+                            $('#'+id).remove();
                         }  else {
                             alert("Fehler beim Löschen");
                         }
