@@ -60,13 +60,13 @@
                                 $res = $query->fetchAll();
                                 
                                 foreach ($res as $entry) {
-                                        print('<tr>');
+                                        print('<tr id="'.$entry["id"].'">');
                                         print('<td>'.$entry["id"].'</td>'); 
                                         print('<td>'.$entry["datum"].'</td>'); 
                                         print('<td>'.$entry["inhalt"].'</td>');
                                         print('<td>
                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>
-                                            <button type="button" class="btn btn-outline-danger">Löschen</button>
+                                            <button type="button" class="btn btn-outline-danger delete">Löschen</button>
                                         </td>');
                                         print('</tr>');
                                 }
@@ -126,15 +126,15 @@
                     success: function(res){
                         // let resJSON = JSON.parse(res);
                         let resJSON = res;
-                        console.log(resJSON);
+                        // console.log(resJSON);
                         if (resJSON !== "error") {
-                            $('#testTable tbody').find('tr:last').after('<tr>'
+                            $('#testTable tbody').find('tr:last').after('<tr id="'+resJSON.ID+'>'
                                     +'<td>'+resJSON.ID+'</td>' 
                                     +'<td>'+resJSON.Datum+'</td>' 
                                     +'<td>'+resJSON.Inhalt+'</td>'
                                     +'<td>'
                                         +'<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>'
-                                        +'<button type="button" class="btn btn-outline-danger">Löschen</button>'
+                                        +'<button type="button" class="btn btn-outline-danger delete">Löschen</button>'
                                     + '</td>'
                                 +'</tr>'
                             );
@@ -146,6 +146,29 @@
                         alert("An error occured: " + err.status + " " + err.statusText);
                     },
                 });
+            })
+            $('#testTable tbody').on('click', 'button.delete', function(event) {
+                let id = $(this).closest('tr').attr('id');
+                // alert("Hier wird nichts gelöscht ("+id+")!");
+                                event.preventDefault();
+                $.ajax({
+                    url: "delete-eintrag.php",
+                    method: "POST",
+                    data: {
+                        id: id,
+                    },   
+                    success: function(res){
+                        if (res.status !== "error") {
+                            alert("Lösche Zeile");
+                        }  else {
+                            alert("Fehler beim Löschen");
+                        }
+                    },
+                    error: function(err){
+                        alert("An error occured: " + err.status + " " + err.statusText);
+                    },
+
+                });        
             })
         })
     </script>    
