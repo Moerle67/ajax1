@@ -127,15 +127,15 @@
                         // let resJSON = JSON.parse(res);
                         let resJSON = res;
                         // console.log(resJSON);
-                        if (resJSON !== "error") {
-                            $('#testTable tbody').find('tr:last').after('<tr id="'+resJSON.ID+'>'
+                        if (resJSON.status !== "error") {
+                            $('#testTable tbody').find('tr:last').after('<tr id="'+resJSON.ID+'">'
                                     +'<td>'+resJSON.ID+'</td>' 
                                     +'<td>'+resJSON.Datum+'</td>' 
                                     +'<td>'+resJSON.Inhalt+'</td>'
                                     +'<td>'
                                         +'<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>'
                                         +'<button type="button" class="btn btn-outline-danger delete">Löschen</button>'
-                                    + '</td>'
+                                    +'</td>'
                                 +'</tr>'
                             );
                         } else {
@@ -150,7 +150,7 @@
             $('#testTable tbody').on('click', 'button.delete', function(event) {
                 let id = $(this).closest('tr').attr('id');
                 // alert("Hier wird nichts gelöscht ("+id+")!");
-                                event.preventDefault();
+                event.preventDefault();
                 $.ajax({
                     url: "delete-eintrag.php",
                     method: "POST",
@@ -169,7 +169,7 @@
                     },
 
                 });        
-            })
+            });
         })
     </script>    
 </body>
