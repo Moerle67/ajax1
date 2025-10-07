@@ -19,7 +19,7 @@
                 <h1>Einpflege von Daten</h1>
                 <form id="neuer_eintrag" method="POST">
                     <div class="mb-3">
-                        <label for="datum" class="form-label">Date</label>
+                        <label for="datum" class="form-label">Datum</label>
                         <input type="datetime-local" class="form-control" id="datum">
                     </div>
                     <div class="mb-3">
@@ -65,7 +65,7 @@
                                         print('<td>'.$entry["datum"].'</td>'); 
                                         print('<td>'.$entry["inhalt"].'</td>');
                                         print('<td>
-                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>
+                                            <button type="button" class="btn btn-outline-primary edit" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>
                                             <button type="button" class="btn btn-outline-danger delete">Löschen</button>
                                         </td>');
                                         print('</tr>');
@@ -80,25 +80,29 @@
         </div>
     </div>
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
-    </button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal Edit -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Bearbeiten von Datensatz</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <form id="edit_eintrag" method="POST">
+                        <div class="mb-3">
+                            <label for="edit_datum" class="form-label">Datum</label>
+                            <input type="datetime-local" class="form-control" id="edit_datum">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_inhalt" class="form-label">Inhalt</label>
+                            <textarea class="form-control" id="edit_inhalt" rows="5"></textarea>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                    <button type="submit" class="btn btn-primary save_modal" data-bs-dismiss="modal">Speichern</button>
                 </div>
             </div>
         </div>
@@ -137,11 +141,16 @@
                                 + '<td>' + resJSON.Datum + '</td>'
                                 + '<td>' + resJSON.Inhalt + '</td>'
                                 + '<td>'
-                                + '<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>'
+                                + '<button type="button" class="btn btn-outline-primary edit" data-bs-toggle="modal" data-bs-target="#editModal">Bearbeiten</button>'
                                 + '<button type="button" class="btn btn-outline-danger delete">Löschen</button>'
                                 + '</td>'
                                 + '</tr>'
                             );
+                            
+                            // Felder initialisieren
+                            $('#datum').val('');
+                            $('#inhalt').val('');
+
                         } else {
                             alert('Fehler beim Einfügen');
                         }
@@ -150,7 +159,8 @@
                         alert("An error occured: " + err.status + " " + err.statusText);
                     },
                 });
-            })
+            }) // Neuer Eintrag
+
             $('#testTable tbody').on('click', 'button.delete', function (event) {
                 let id = $(this).closest('tr').attr('id');
                 // alert("Hier wird nichts gelöscht ("+id+")!");
@@ -173,9 +183,47 @@
                     },
 
                 });
-            });
+            }); // delete
+
+            // Modal ID
+            let modalID = "";
+
+            // Show Edit Modal
+            $('#testTable tbody').on('click', 'button.edit', function (event) {
+                id = $(this).closest('tr').attr('id');
+                modalID = id;
+
+                // Inhalte
+                $('#edit_datum').val( $('#'+id+' td:eq(1)').text() );
+                $('#edit_inhalt').val( $('#'+id+' td:eq(2)').text() );
+            }) // show edit modal
+
+            $('#editModal .save_modal').on('click', function (event) {
+                $.ajax({
+                    url: "edit-eintrag.php",
+                    method: "POST",
+                    data: {
+                        id: modalID,
+                        datum: $('#datum').val(),
+                        inhalt: $('#inhalt').val().trim()
+                    },
+                    success: function (res) {
+                        // let resJSON = JSON.parse(res);
+                        let resJSON = res;
+                        // console.log(resJSON);
+                        if (resJSON.status !== "error") {
+                            test=0;
+                        } else {
+                            alert('Fehler beim Einfügen');
+                        }
+                    },
+                    error: function (err) {
+                        alert("Fehler beim Editieren: " + err.status + " " + err.statusText);
+                    }, // AJAX
+                })    
+            }) // Edit
         })
     </script>
 </body>
 
-</html>
+</html> 
