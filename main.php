@@ -199,20 +199,21 @@
             }) // show edit modal
 
             $('#editModal .save_modal').on('click', function (event) {
+                console.log(modalID);
                 $.ajax({
                     url: "edit-eintrag.php",
                     method: "POST",
                     data: {
                         id: modalID,
-                        datum: $('#datum').val(),
-                        inhalt: $('#inhalt').val().trim()
+                        datum: $('#edit_datum').val(),
+                        inhalt: $('#edit_inhalt').val().trim()
                     },
                     success: function (res) {
                         // let resJSON = JSON.parse(res);
                         let resJSON = res;
                         // console.log(resJSON);
                         if (resJSON.status !== "error") {
-                            test=0;
+                            $('#'+modalID+" td:eq(1)").text( $('#edit_datum').val() );
                         } else {
                             alert('Fehler beim Einfügen');
                         }
