@@ -14,10 +14,10 @@
         try {
             require_once('db.php');
             $db = DB::connectDB();
-            $query = $db->prepare('UPDATE testtabelle SET datum = :datum, inhalt = :inhalt WHERE id = :id');
+            $query = $db->prepare('UPDATE testtabelle SET datum = :datum, inhalt = :inhalt WHERE id = :id;');
             $query->bindParam(":datum", $datum, PDO::PARAM_STR);
             $query->bindParam(":inhalt", $inhalt, PDO::PARAM_STR);
-            $query->bindParam(":id", $inhalt, PDO::PARAM_INT);
+            $query->bindParam(":id", $id, PDO::PARAM_INT);
             $query->execute();
            
         } catch (PDOException $ex) {

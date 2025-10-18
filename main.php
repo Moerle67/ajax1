@@ -20,7 +20,7 @@
                 <form id="neuer_eintrag" method="POST">
                     <div class="mb-3">
                         <label for="datum" class="form-label">Datum</label>
-                        <input type="datetime-local" class="form-control" id="datum">
+                        <input type="date" class="form-control" id="datum">
                     </div>
                     <div class="mb-3">
                         <label for="inhalt" class="form-label">Inhalt</label>
@@ -92,7 +92,7 @@
                     <form id="edit_eintrag" method="POST">
                         <div class="mb-3">
                             <label for="edit_datum" class="form-label">Datum</label>
-                            <input type="datetime-local" class="form-control" id="edit_datum">
+                            <input type="date" class="form-control" id="edit_datum">
                         </div>
                         <div class="mb-3">
                             <label for="edit_inhalt" class="form-label">Inhalt</label>
@@ -214,6 +214,7 @@
                         // console.log(resJSON);
                         if (resJSON.status !== "error") {
                             $('#'+modalID+" td:eq(1)").text( $('#edit_datum').val() );
+                            $('#'+modalID+" td:eq(2)").text( $('#edit_inhalt').val() );
                         } else {
                             alert('Fehler beim Einfügen');
                         }
